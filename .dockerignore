@@ -5,42 +5,17 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Testing
-coverage
-**/*.test.ts
-**/*.test.tsx
-**/*.spec.ts
-**/*.spec.tsx
-
-# Production build
-build
-
-# Development
+# Git and version control
 .git
 .gitignore
 .github
-.vscode
-*.md
-!README.md
 
-# TypeScript
-*.tsbuildinfo
-tsconfig.*.json
-!tsconfig.json
-
-# Environment
+# Environment files
 .env*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Vite
-vite.config.ts.timestamp-*
-
-# ESLint
-.eslintcache
-.eslintrc*
 
 # Editor directories and files
 .idea
@@ -51,65 +26,24 @@ vite.config.ts.timestamp-*
 *.sln
 *.sw?
 
-# OS files
-.DS_Store
-Thumbs.db
-*.pem
+# Build output
+dist
+build
 
-# Logs
-logs
-*.log
+# Testing
+coverage
+**/*.test.ts
+**/*.test.tsx
 
-# Project specific
-supabase/.branches
-supabase/.temp
-.bolt
-
-# Cache directories
-.npm
-.eslintcache
-.stylelintcache
-*.tsbuildinfo
-
-# Temporary files
-*.tmp
-*.temp
-.cache
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Git and version control
-.git
-.gitignore
-.github
-
-# Editor directories and files
-.idea
-.vscode
-*.swp
-*.swo
-
-# Logs
-logs
-*.log
-
-# Supabase local development
-supabase/.branches
-supabase/.temp
-
-# Bolt directory
-.bolt
+# Development files
+README.md
+*.md
+.eslintrc*
+.prettierrc*
 
 # TypeScript
 *.tsbuildinfo
-tsconfig.*.json
-!tsconfig.app.json  # Allow tsconfig.app.json
+
+# Misc
+.DS_Store
+Thumbs.db

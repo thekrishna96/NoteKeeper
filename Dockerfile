@@ -1,32 +1,35 @@
 # Stage 1: Build the application
-FROM node:18 AS build
+FROM node:18-alpine AS builder
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy the rest of the application code
+# Copy application files
 COPY . .
 
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve the application with Nginx
+# Stage 2: Serve the application
 FROM nginx:alpine
 
-# Copy built files from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy TypeScript configuration files if needed
-COPY config/tsconfig.app.json ./config/
+# Copy built files from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080 (Cloud Run requirement)
+EXPOSE 8080
+
+# Use non-root user for better security
+USER nginx
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
