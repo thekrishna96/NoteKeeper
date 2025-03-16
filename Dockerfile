@@ -32,4 +32,4 @@ EXPOSE 8080
 USER nginx
 
 # Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]
