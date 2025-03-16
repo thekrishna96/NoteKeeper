@@ -33,13 +33,33 @@ This is a React TypeScript application built with Vite. The application is conta
 docker build -t project-bolt .
 ```
 
+The Dockerfile uses a multi-stage build process:
+
+- Stage 1 (builder): Installs dependencies and builds the application
+- Stage 2 (runner): Creates a minimal production image
+
 ### Running the Docker Container Locally
 
 ```bash
 docker run -p 8080:8080 project-bolt
 ```
 
+The container includes:
+
+- Non-root user for security
+- Health check endpoint
+- Optimized production settings
+- Environment variable support
+
 The application will be available at http://localhost:8080.
+
+### Docker Build Features
+
+- Multi-stage build for smaller production images
+- Security hardening with non-root user
+- Built-in health checks
+- Optimized layer caching
+- Comprehensive .dockerignore for faster builds
 
 ## Deployment to Cloud Run
 
@@ -94,6 +114,10 @@ For production deployment, these are set as secrets in Cloud Run via the `cloudb
 ## Important Files
 
 - `Dockerfile`: Defines how the application is containerized
+  - Multi-stage build process
+  - Security hardening
+  - Health checks
+  - Production optimizations
 - `cloudbuild.yaml`: Configures the Cloud Build pipeline
-- `.dockerignore`: Specifies files to exclude from the Docker build context
+- `.dockerignore`: Optimizes build context and improves build speed
 - `.env`: Contains environment variables for local development (not included in Docker build)
