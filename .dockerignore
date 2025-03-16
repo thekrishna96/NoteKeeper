@@ -3,11 +3,14 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
 # Testing
 coverage
-*.test.js
-*.spec.js
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
 
 # Production build
 dist
@@ -21,6 +24,11 @@ build
 *.md
 !README.md
 
+# TypeScript
+*.tsbuildinfo
+tsconfig.*.json
+!tsconfig.json
+
 # Environment
 .env*
 .env.local
@@ -28,18 +36,35 @@ build
 .env.test.local
 .env.production.local
 
+# Vite
+vite.config.ts.timestamp-*
+
+# ESLint
+.eslintcache
+.eslintrc*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # OS files
 .DS_Store
 Thumbs.db
+*.pem
+
+# Logs
+logs
+*.log
 
 # Project specific
 supabase/.branches
 supabase/.temp
 .bolt
-
-# Logs
-logs
-*.log
 
 # Cache directories
 .npm
@@ -47,10 +72,10 @@ logs
 .stylelintcache
 *.tsbuildinfo
 
-# Editor directories and files
-.idea
-*.swp
-*.swo
+# Temporary files
+*.tmp
+*.temp
+.cache
 
 # OS generated files
 .DS_Store
@@ -73,10 +98,6 @@ Thumbs.db
 .vscode
 *.swp
 *.swo
-
-# OS generated files
-.DS_Store
-Thumbs.db
 
 # Logs
 logs
