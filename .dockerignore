@@ -13,7 +13,6 @@ coverage
 **/*.spec.tsx
 
 # Production build
-dist
 build
 
 # Development
@@ -108,4 +107,4 @@ supabase/.branches
 supabase/.temp
 
 # Bolt directory
-.bolt 
+.bolt

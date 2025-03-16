@@ -1,82 +1,32 @@
-# Stage 1: Build environment
-FROM node:20-alpine AS builder
+# Step 1: Build the application
+FROM node:14 AS build
 
+# Set the working directory
 WORKDIR /app
 
-# Install build dependencies
-RUN apk add --no-cache python3 make g++
-
-# Copy package files first for better layer caching
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
-# Create necessary directories
-RUN mkdir -p /app/public
-
-# Copy TypeScript and Vite configurations
-COPY tsconfig*.json ./
-COPY vite.config.ts ./
-
-# Create TypeScript configuration files if they don't exist
-RUN echo '{\
-    "extends": "./tsconfig.json",\
-    "compilerOptions": {\
-      "composite": true,\
-      "module": "ESNext",\
-      "moduleResolution": "bundler",\
-      "allowImportingTsExtensions": true\
-    },\
-    "include": ["src/**/*.ts", "src/**/*.tsx"]\
-  }' > tsconfig.app.json && \
-  echo '{\
-    "compilerOptions": {\
-      "composite": true,\
-      "module": "ESNext",\
-      "moduleResolution": "bundler",\
-      "allowSyntheticDefaultImports": true\
-    },\
-    "include": ["vite.config.ts"]\
-  }' > tsconfig.node.json
-
-# Copy source code and static files
-COPY src/ ./src/
-COPY index.html ./
+# Copy the rest of the application code
+COPY . .
 
 # Build the application
 RUN npm run build
 
-# Stage 2: Production environment
-FROM node:20-alpine AS runner
+# Step 2: Serve the application with Nginx
+FROM nginx:alpine
 
-# Set NODE_ENV
-ENV NODE_ENV=production
+# Copy the built application from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Create a non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 appuser && \
-    mkdir -p /app && \
-    chown -R appuser:nodejs /app
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-WORKDIR /app
+# Expose port 80
+EXPOSE 80
 
-# Install a simple web server to serve static content
-RUN npm install -g serve@14
-
-# Copy the built application from builder stage
-COPY --from=builder --chown=appuser:nodejs /app/dist/ /app/dist/
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget -q --spider http://localhost:8080/ || exit 1
-
-# Switch to non-root user
-USER appuser
-
-# Expose the port the app will run on
-ENV PORT=8080
-EXPOSE 8080
-
-# Start the application with serve
-CMD ["serve", "-s", "dist", "-l", "8080"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
