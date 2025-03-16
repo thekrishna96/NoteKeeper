@@ -1,5 +1,5 @@
-# Step 1: Build the application
-FROM node:14 AS build
+# Stage 1: Build the application
+FROM node:18 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -16,14 +16,14 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Step 2: Serve the application with Nginx
+# Stage 2: Serve the application with Nginx
 FROM nginx:alpine
 
-# Copy the built application from the previous stage
+# Copy built files from the build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy TypeScript configuration files if needed
+COPY config/tsconfig.app.json ./config/
 
 # Expose port 80
 EXPOSE 80

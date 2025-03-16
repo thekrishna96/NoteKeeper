@@ -108,3 +108,8 @@ supabase/.temp
 
 # Bolt directory
 .bolt
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.*.json
+!tsconfig.app.json  # Allow tsconfig.app.json
